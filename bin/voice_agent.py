@@ -1,4 +1,5 @@
 import os
+import base64
 from dotenv import load_dotenv
 from deepgram import (
     DeepgramClient,
@@ -13,10 +14,12 @@ deepgram = DeepgramClient(os.getenv("DEEPGRAM_API_KEY"))
 def text_to_speech(question_text, filename="question.mp3"):
     try:
         options = SpeakOptions(model="aura-orpheus-en")
-        TEXT = {"text": question_text }
+        TEXT = { "text": question_text }
         response = deepgram.speak.rest.v("1").stream(TEXT, options)
-
-        print(response)
+        
+        audio_stream = base64.b64encode(response.stream.getvalue()).decode("utf-8")
+        return audio_stream
+        
     except Exception as e:
         raise e
 

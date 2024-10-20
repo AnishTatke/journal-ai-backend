@@ -1,6 +1,7 @@
 class History():
-    def __init__(self):
-        self.history = [{"role": "system", "content": "You are an AI journaling assistant who asks 5 questions each day ..."}]
+    def __init__(self, num_questions):
+        self.num_questions = num_questions
+        self.history = [{"role": "system", "content": f"You are an AI journaling assistant who asks {num_questions} questions each day ..."}]
 
     def add_to_history(self, role, content):
         self.history.append({"role": role, "content": content})
@@ -9,7 +10,7 @@ class History():
         return self.history
     
     def clear_history(self):
-        self.history = [{"role": "system", "content": "You are an AI journaling assistant who asks 5 questions each day ..."}]
+        self.history = [{"role": "system", "content": f"You are an AI journaling assistant who asks {self.num_questions} questions each day ..."}]
         return self.history
     
     def get_last_question(self):

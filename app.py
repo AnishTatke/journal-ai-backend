@@ -13,7 +13,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-conversation_history = History()
+conversation_history = History(num_questions=5)
 
 # Routes
 @app.route('/api/new_user', methods=['POST'])
@@ -66,15 +66,14 @@ def send_question():
     try:
         # Generate a question
         question = generate_next_question(conversation_history)
-        print(f"Groq: {question}")
         conversation_history.add_to_history("assistant", question)
         # Convert question to audio
-        text_to_speech(question)
+        audio_base64 = text_to_speech(question)
         response = {
             "status": True,
             'id': 0,
             'text': question,
-            'audioUrl': "audio_base64"
+            'audioUrl': audio_base64
         }
         socketio.emit('question', response)
     except Exception as e:

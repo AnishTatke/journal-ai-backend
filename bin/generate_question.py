@@ -10,7 +10,6 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # Generate the next question using Groq based on the conversation history.
 def generate_next_question(history: History):
     hist = history.get_history()
-    print(hist)
     completion = client.chat.completions.create(
         model="llama3-8b-8192",
         messages=hist,
